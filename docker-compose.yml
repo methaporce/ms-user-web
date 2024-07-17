@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14.3
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    restart: always
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+volumes:
+  postgres-db:
+    external: false
+  redis_data:
+    external: false
