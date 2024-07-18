@@ -22,8 +22,8 @@ public class RedisController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Object> getFromRedis(@RequestParam String key, @RequestParam Class<?> valueType) throws IOException, IOException {
-        Object value = redisService.getFromRedis(key, valueType);
+    public ResponseEntity<Object> getFromRedis(@RequestParam String key) throws IOException, IOException {
+        Object value = redisService.getFromRedis(key);
         if (value != null) {
             return ResponseEntity.ok(value);
         } else {

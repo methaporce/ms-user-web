@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.io.IOException;
+import java.time.Duration;
+import java.util.Map;
 
 @Service
 public class RedisService {
@@ -19,13 +20,14 @@ public class RedisService {
 
     public void saveToRedis(String key, Object value) throws JsonProcessingException {
         String jsonValue = objectMapper.writeValueAsString(value);
-        redisTemplate.opsForValue().set(key, jsonValue);
+        redisTemplate.opsForValue().set(key, jsonValue, Duration.ofMinutes(1) );
     }
 
-    public <T> T getFromRedis(String key, Class<T> clazz) throws IOException {
+    public Map<String, Object> getFromRedis(String  key) throws JsonProcessingException {
         String jsonValue = redisTemplate.opsForValue().get(key);
-        return jsonValue != null ? objectMapper.readValue(jsonValue, clazz) : null;
+        return objectMapper.readValue(jsonValue, Map.class);
     }
+
 
     public void deleteFromRedis(String key) {
         redisTemplate.delete(key);
