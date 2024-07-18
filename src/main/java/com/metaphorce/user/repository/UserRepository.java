@@ -1,6 +1,5 @@
 package com.metaphorce.user.repository;
 
-
 import com.metaphorce.databaseLib.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,9 @@
 package com.metaphorce.user.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.metaphorce.databaseLib.dto.UserDto;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import java.time.Duration;
 
 @Service
@@ -14,6 +12,8 @@ public class RateLimiterService {
     @Autowired
     private RedisTemplate<String, Integer> redisTemplate;
 
+
+    @CircuitBreaker(name = "executeTaskCircuitBreaker", fallbackMethod = "fallbackExecuteTask")
     public boolean isAllowed(String role, Long userId) {
 
         String key = "rate_limit:" + userId + ":" + role;
@@ -39,7 +39,7 @@ public class RateLimiterService {
         }
     }
 
-    public int getCurrentCount(String role, Long userId) {
+    public int getNumberOfRequests(String role, Long userId) {
         String key = "rate_limit:" + userId + ":" + role;
 
         return redisTemplate.opsForValue().get(key) == null ? 0 : redisTemplate.opsForValue().get(key);

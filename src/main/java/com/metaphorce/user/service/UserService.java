@@ -1,7 +1,6 @@
 package com.metaphorce.user.service;
 
 import com.metaphorce.databaseLib.dto.UserDto;
-
 import java.util.List;
 
 public interface UserService {
